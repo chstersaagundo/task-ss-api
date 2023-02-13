@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->integer('category_id');
+            $table->unsignedBigInteger('category_id')->index('tasks_category_id_foreign');
             $table->string('task_name', 100);
             $table->string('task_desc', 255)->nullable();
             $table->boolean('is_starred');
@@ -25,8 +25,9 @@ return new class extends Migration
             $table->date('end_date', $precision = 0);
             $table->time('start_time', $precision = 0);
             $table->time('end_time', $precision = 0);
-
+            
             $table->timestamps();
+            $table->foreign('category_id')->references('id')->on('categories')->onUpdate('NO ACTION')->onDelete('cascade');
         });
     }
 
