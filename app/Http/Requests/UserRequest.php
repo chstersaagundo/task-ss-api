@@ -15,7 +15,7 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        //set to true everytime when making a request form to be recognized as authorized sheesh
+        //set to true everytime when making a request form to be recognize as authorized sheesh
         return true;
     }
 
