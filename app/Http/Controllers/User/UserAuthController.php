@@ -102,7 +102,12 @@ class UserAuthController extends Controller{
             "success" => true,
             "message" => "Authentication Successful",
             "data" => [
-                "token" => $user_auth_token
+                "token" => $user_auth_token,
+                "id" => $user->id,
+                "email" => $user->email,
+                "firstname" => $user->firstname,
+                "lastname" => $user->lastname,
+                "phone" => $user->phone
             ]
         ]);
     }
