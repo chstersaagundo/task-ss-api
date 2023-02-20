@@ -24,7 +24,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //kalibog shyet
+        //kalibog shyet hahhah
         $user = Auth::user();
         $datas = User::where('email', $user->email)->first();
         $category = Category::where('user_id', $datas->id)->get();
