@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id')->index('tasks_category_id_foreign');
+            $table->unsignedBigInteger('task_type_id')->index('tasks_types_task_type_id_foreign');
             $table->string('task_name', 100);
             $table->string('task_desc', 255)->nullable();
             $table->boolean('is_starred');
@@ -28,6 +29,7 @@ return new class extends Migration
             
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onUpdate('NO ACTION')->onDelete('cascade');
+            $table->foreign('task_type_id')->references('id')->on('task_types')->onUpdate('NO ACTION')->onDelete('cascade');
         });
     }
 

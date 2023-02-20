@@ -16,12 +16,12 @@ class CategoryFactory extends Factory
      */
     public function definition()
     {
-        $color = $this->faker->randomElement(['100', '200', '300', '400', '500']);
+        // $color = $this->faker->randomElement(['100', '200', '300', '400', '500']);
 
-        return [
-            'category_name' => $this->faker->word(),
-            'category_desc' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
-            'color' => $color
-        ];
+        // return [
+        //     'category_name' => $this->faker->word(),
+        //     'category_desc' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
+        //     'color' => $color
+        // ];
     }
 }

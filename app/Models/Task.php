@@ -12,4 +12,8 @@ class Task extends Model
     public function category() {
         return $this->belongsTo(Category::class);
     }
+
+    public function task_type() {
+        return $this->belongsTo(TaskType::class);
+    }
 }

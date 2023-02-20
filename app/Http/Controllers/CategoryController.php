@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Services\TaskService;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CategoryRequest;
+
 
 class CategoryController extends Controller
 {
+    private TaskService $taskService;
+
+    public function __construct(TaskService $taskService){
+        $this->taskService = $taskService;
+    }   
     /**
      * Display a listing of the resource.
      *
@@ -14,10 +24,17 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        //kalibog shyet
+        $user = Auth::user();
+        $datas = User::where('email', $user->email)->first();
+        $category = Category::where('user_id', $datas->id)->get();
+
         return response()->json([
             'success' => true,
             'message' => 'Fetch successfully',
-            'data' => Category::all()
+            'data' => [
+                "data" => $category
+            ]
         ], 200);
     }
 
@@ -37,9 +54,26 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         //
+        if($request->validated()) {
+
+            $data = $this->taskService->create($request->validated());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Adding Category Succesful!',
+                "data" => [
+                    "data" => $data
+                ]
+            ], 200);
+        }
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not valid'
+        ], 422);
     }
 
     /**
