@@ -24,7 +24,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //kalibog shyet hahhah
+        //kalibog shyet ahaha
         $user = Auth::user();
         $datas = User::where('email', $user->email)->first();
         $category = Category::where('user_id', $datas->id)->get();
@@ -85,19 +85,19 @@ class CategoryController extends Controller
     public function show($id)
     {
         $category = Category::find($id);
-
         if ($category) {
             return response()->json([
                 'success' => true,
-                'message' => 'Fetch Successfully',
+                'message' => 'Category Found',
                 'data' => $category
             ], 200);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Fetch Failed'
+            'message' => 'Category not found'
         ], 404);
+        
     }
 
     /**
@@ -118,9 +118,27 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        //
+        //find first the category id
+        $category = Category::find($id);
+        //if true
+        if ($category){
+            //update category by requesting inputs
+            $category->update($request->all());
+            //using update() method to put data into updated_at field in database, and I thank you.
+            return response()->json([
+                'success' => true,
+                'message' => 'Category Successfully Updated',
+                'data' => $category
+            ], 200);
+        }
+
+        //otherwise return json response
+        return response()->json([
+            'success' => false,
+            'message' => 'Category not found'
+        ], 404);
     }
 
     /**
@@ -134,7 +152,7 @@ class CategoryController extends Controller
         Category::where('id', $id)->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Removed Successfully',
+            'message' => 'Category Removed Successfully',
             'data' => $id
         ], 200);
     }
