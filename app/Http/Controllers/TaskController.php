@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Validator;
+use App\Models\User;
 use App\Models\Task;
+use Illuminate\Http\Request;
+use App\Services\TaskService;
+use App\Http\Requests\TaskRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    private TaskService $taskService;
+
+    public function __construct(TaskService $taskService){
+        $this->taskService = $taskService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -37,9 +47,26 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
         //
+        if($request->validated()) {
+
+            $data = $this->taskService->createTask($request->validated());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Adding Task Succesful!',
+                "data" => [
+                    "data" => $data
+                ]
+            ], 200);
+        }
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not valid'
+        ], 422);
     }
 
     /**
