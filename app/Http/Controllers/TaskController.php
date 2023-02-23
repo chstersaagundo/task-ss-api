@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Validator;
-use App\Models\User;
 use App\Models\Task;
+use App\Models\User;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
 use App\Http\Requests\TaskRequest;
@@ -27,7 +28,9 @@ class TaskController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Fetch successfully',
-            'data' => Task::all()
+            'data' => [
+                "data" => Task::all()
+            ]
         ], 200);
     }
 
@@ -111,9 +114,24 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, $id)
     {
         //
+        $task = Task::find($id);
+        if ($task){
+            $task->update($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Task Successfully Updated',
+                'data' => $task
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Task not found'
+        ], 404);
     }
 
     /**

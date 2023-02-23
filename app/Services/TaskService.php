@@ -40,26 +40,22 @@ class TaskService
         $user = Auth::user();
         //getting the email from the authenticated user
         $datas = User::where('email', $user->email)->first();
-        //getting the category user_id
-        $category = Category::where('id', $datas->id)->first();
-        
+
         //Save the task infos
         Task::create([
-            'category_id' => $category->id, 
-            'task_type_id' => $data['task_type_id'],
+            'category_id' => $data['category_id'], //input id from a specific category
+            'task_type_id' => $data['task_type_id'], //select task type (1 - to do list || 2 - to be done)
             'task_name' => $data['task_name'],
             'task_desc' => $data['task_desc'],
-            'is_starred' => $data['is_starred'],
-            'priority' => $data['priority'],
-            'status' => $data['status'],
-            'start_date' => $data['start_date'],
-            'end_date' => $data['end_date'],
-            'start_time' => $data['start_time'],
-            'end_time' => $data['end_time'],
+            'is_starred' => $data['is_starred'], // 1 - starred || 0 - not
+            'priority' => $data['priority'], //level of priority (bornz ay)
+            'status' => $data['status'], // completed || pending || abandoned
+            'start_date' => $data['start_date'], // Y-m-d { ex. 2023-12-12 }
+            'end_date' => $data['end_date'], // Y-m-d ex. { 2023-12-13 }
+            'start_time' => $data['start_time'], // H:i:s { ex. 18:59:32 }
+            'end_time' => $data['end_time'], // H:i:s { ex. 19:00:14 }
         ]);
-        
-        
-
+              
         return $data;
     }
 
