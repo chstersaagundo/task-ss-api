@@ -30,10 +30,18 @@ Route::prefix('user')->group(function() {
 
     Route::group(['middleware' => ['auth:sanctum']], function() {
         Route::post('/auth/logout', [UserAuthController::class, 'logout']);
+
+        //Category Routes
         Route::resource('categories', CategoryController::class);
+
+        //Task Routes
         Route::get('tasks/all/{id}', [TaskController::class, 'allTasksById']);
         Route::get('tasks/allstarred', [TaskController::class, 'allStarredTasks']);
-        Route::resource('tasks', TaskController::class);
+        Route::get('/categories/{id}/tasks', [TaskController::class, 'index']);
+        Route::post('/categories/{id}/tasks', [TaskController::class, 'store']);
+        Route::get('/categories/{c_id}/tasks/{t_id}', [TaskController::class, 'show']); 
+        Route::put('/categories/{c_id}/tasks/{t_id}', [TaskController::class, 'update']);  
+        Route::delete('/categories/{c_id}/tasks/{t_id}', [TaskController::class, 'destroy']);  
     });
 });
 

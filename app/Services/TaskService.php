@@ -33,17 +33,17 @@ class TaskService
         return $data;
     }
 
-    //Wala pa ni, char2 ra ni hahaha
     public function createTask(array $data)
     {
         //retrieving the authenticated user
         $user = Auth::user();
         //getting the email from the authenticated user
         $datas = User::where('email', $user->email)->first();
+        $category = Category::where('user_id', $datas->id)->get();
 
         //Save the task infos
         Task::create([
-            'category_id' => $data['category_id'], //input id from a specific category
+            'category_id' => $category->id, //input id from a specific category
             'task_type_id' => $data['task_type_id'], //select task type (1 - to do list || 2 - to be done)
             'task_name' => $data['task_name'],
             'task_desc' => $data['task_desc'],
