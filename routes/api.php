@@ -35,21 +35,17 @@ Route::prefix('user')->group(function() {
         Route::resource('categories', CategoryController::class);
 
         //Task Routes
-        Route::get('tasks/all/{id}', [TaskController::class, 'allTasksById']);
-        Route::get('tasks/allstarred', [TaskController::class, 'allStarredTasks']);
+        Route::get('tasks/starred', [TaskController::class, 'allStarredTasks']);
+        Route::get('tasks/type/{id}', [TaskController::class, 'getTaskType']);
 
-        //Task Routes by Categories
-        Route::get('/tasks', [TaskController::class, 'index']);
-        Route::post('/tasks', [TaskController::class, 'store']);
-        Route::get('/tasks/{id}', [TaskController::class, 'show']); 
-        Route::put('/tasks/{id}', [TaskController::class, 'update']);  
-        Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);  
+        Route::get('tasks', [TaskController::class, 'index']);
+        Route::post('tasks', [TaskController::class, 'store']);
+        Route::get('tasks/{id}', [TaskController::class, 'show']); 
+        Route::put('tasks/{id}', [TaskController::class, 'update']);  
+        Route::delete('tasks/{id}', [TaskController::class, 'destroy']);  
 
-        Route::get('/tasks/type/{id}', [TaskController::class, 'getByTaskType']);
-        
-
-        //Task Routes by User
-        Route::get('/inbox', [TaskController::class, 'allTasksByUser']);
+        //Task Routes by Category
+        Route::get('tasks/category/{id}', [TaskController::class, 'allTasksByCategory']);
     });
 });
 

@@ -195,23 +195,42 @@ class TaskController extends Controller
 
     }
 
-    public function allTasksById($id)
+    public function allTasksByCategory($id)
     {
+        $user = Auth::user();
+        
         return response()->json([
             'success' => true,
             'message' => 'Fetch successfully',
-            'data' => Task::where('category_id', $id)->get()
+            'data' => Task::where('category_id', $id)
+                          ->where('user_id', $user->id)->get()
         ], 200);
     }
 
     public function allStarredTasks()
     {
+        $user = Auth::user();
+
         return response()->json([
             'success' => true,
             'message' => 'Fetch successfully',
-            'data' => Task::where('is_starred', 1)->get()
+            'data' => Task::where('is_starred', 1)
+                          ->where('user_id', $user->id)->get()
         ], 200);
     }
+
+    public function getTaskType($id)
+    {
+        $user = Auth::user();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch successfully',
+            'data' => Task::where('task_type_id', $id)
+                          ->where('user_id', $user->id)->get()
+        ], 200);
+    }
+
 
     public function allTasksByUser()
     {
