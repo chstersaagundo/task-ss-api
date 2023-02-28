@@ -232,19 +232,5 @@ class TaskController extends Controller
     }
 
 
-    public function allTasksByUser()
-    {
-        $category = Category::whereUserId(Auth::id())->get();
-        $category_id = Category::where('user_id', $category);
-        
-        $task = Task::all()->where;
-        return response()->json([
-            'success' => true,
-            'message' => 'Task Successfully Updated',
-            'data' => $category_id
-        ], 200);    
-        
-            
-    }
 
 }
