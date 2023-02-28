@@ -12,6 +12,7 @@ class Task extends Model
     protected $fillable = [
         'category_id',
         'task_type_id',
+        'user_id',
         'task_name',
         'task_desc',
         'is_starred',

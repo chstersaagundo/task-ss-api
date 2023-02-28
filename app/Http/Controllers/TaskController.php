@@ -23,19 +23,28 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        $category = Category::find($id);
-        if ($category) {
-            $task = Task::where('category_id', $category->id)->get();
-            return response()->json([
-                'success' => true,
-                'message' => 'Fetch successfully',
-                'data' => [
-                    "data" => $task
-                ]
-            ], 200);
-        }
+        $user = Auth::user();
+        $task = Task::where('user_id', $user->id)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch successfully',
+            'data' => [
+                "data" => $task
+            ]
+        ], 200);
+        // if ($category) {
+        //     $task = Task::where('category_id', $category->id)->get();
+        //     return response()->json([
+        //         'success' => true,
+        //         'message' => 'Fetch successfully',
+        //         'data' => [
+        //             "data" => $task
+        //         ]
+        //     ], 200);
+        // }
 
         return response()->json([
             'success' => false,
@@ -61,15 +70,17 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TaskRequest $request, $id)
+    public function store(TaskRequest $request)
     {
         //
-        $category = Category::find($id);
+        $user = Auth::user();
+        $category = Category::where('user_id', $user->id)->exists();
         if ($category) {
             if($request->validated()) {
                 $task = new Task;
-                $task->category_id = $id;
+                $task->category_id = $request->category_id;
                 $task->task_type_id = $request->task_type_id;
+                $task->user_id = $user->id;
                 $task->task_name = $request->task_name;
                 $task->task_desc = $request->task_desc;
                 $task->is_starred = $request->is_starred;
@@ -108,12 +119,12 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($cat_id, $t_id)
+    public function show($id)
     {
-        
-        $category = Category::find($cat_id);
+        $user = Auth::user();
+        $category = Category::where('user_id', $user->id)->exists();
         if ($category) {
-            $task = Task::find($t_id);
+            $task = Task::find($id);
             return response()->json([
                 'success' => true,
                 'message' => 'Fetch successfully',
@@ -147,31 +158,23 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TaskRequest $request, $c_id, $t_id)
+    public function update(TaskRequest $request, $id)
     {
         //
-        $category = Category::find($c_id);
-        if($category){
-            $task = Task::find($t_id);
-            if ($task){
-                $task->update($request->all());
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Task Successfully Updated',
-                    'data' => $task
-                ], 200);
-            }
+        $task = Task::find($id);
+        if($task){
+            $task->update($request->all());
 
             return response()->json([
-                'success' => false,
-                'message' => 'Task not found'
-            ], 404);
+                'success' => true,
+                'message' => 'Task Successfully Updated',
+                'data' => $task
+            ], 200);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Category not found'
+            'message' => 'Task not found'
         ], 404);
     }
 
@@ -181,21 +184,14 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($c_id, $t_id)
+    public function destroy($id)
     {
-        $category = Category::find($c_id);
-        if($category){
-            Task::where('id', $t_id)->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'Removed Successfully',
-                'data' => $t_id
-            ], 200);
-        }
+        Task::where('id', $id)->delete();
         return response()->json([
-            'success' => false,
-            'message' => 'Category not found'
-        ], 404);
+            'success' => true,
+            'message' => 'Removed Successfully',
+            'data' => $id
+        ], 200);
 
     }
 
@@ -216,4 +212,20 @@ class TaskController extends Controller
             'data' => Task::where('is_starred', 1)->get()
         ], 200);
     }
+
+    public function allTasksByUser()
+    {
+        $category = Category::whereUserId(Auth::id())->get();
+        $category_id = Category::where('user_id', $category);
+        
+        $task = Task::all()->where;
+        return response()->json([
+            'success' => true,
+            'message' => 'Task Successfully Updated',
+            'data' => $category_id
+        ], 200);    
+        
+            
+    }
+
 }

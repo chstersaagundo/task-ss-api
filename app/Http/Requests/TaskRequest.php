@@ -25,7 +25,7 @@ class TaskRequest extends FormRequest
     {
         return [
             //
-            //'category_id'       => ['sometimes'],
+            'category_id'       => ['sometimes'],
             'task_type_id'       => ['sometimes'],
             'task_name'          => ['required', 'string', 'max:100'],
             'task_desc'          => ['sometimes', 'nullable', 'string', 'max:255'],
