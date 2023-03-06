@@ -49,4 +49,12 @@ class User extends Authenticatable
         'trial_card' => 'boolean',
         'is_verified' => 'boolean',
     ];
+
+    public function categories() {
+        return $this->hasMany(Category::class);
+    }
+
+    public function tasks() {
+        return $this->hasMany(Task::class);
+    }
 }

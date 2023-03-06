@@ -31,9 +31,7 @@ class TaskController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Fetch successfully',
-            'data' => [
-                "data" => $task
-            ]
+            'data' => $task
         ], 200);
         // if ($category) {
         //     $task = Task::where('category_id', $category->id)->get();
@@ -95,9 +93,7 @@ class TaskController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => 'Adding Task Succesful!',
-                    "data" => [
-                        "data" => $task
-                    ]
+                    "data" => $task
                 ], 200);
             }
 
@@ -128,9 +124,7 @@ class TaskController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Fetch successfully',
-                'data' => [
-                    "data" => $task
-                ]
+                'data' => $task
             ], 200);
         }
 

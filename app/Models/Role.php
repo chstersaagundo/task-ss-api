@@ -22,4 +22,8 @@ class Role extends Authenticatable
         'desc',
     ];
 
+    public function users() {
+        return $this->hasMany(User::class);
+    }
+
 }
