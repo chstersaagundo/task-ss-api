@@ -107,7 +107,8 @@ class UserAuthController extends Controller{
                 "email" => $user->email,
                 "firstname" => $user->firstname,
                 "lastname" => $user->lastname,
-                "phone" => $user->phone
+                "phone" => $user->phone,
+                "role_id" => $user->role_id
             ]
         ]);
     }
