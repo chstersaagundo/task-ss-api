@@ -26,7 +26,7 @@ class TaskController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $task = Task::where('user_id', $user->id)->get();
+        $task = Task::where('user_id', $user->id)->with('category:id,category_name,color')->get();
 
         return response()->json([
             'success' => true,
@@ -209,7 +209,8 @@ class TaskController extends Controller
             'success' => true,
             'message' => 'Fetch successfully',
             'data' => Task::where('is_starred', 1)
-                          ->where('user_id', $user->id)->get()
+                          ->where('user_id', $user->id)
+                          ->with('category:id,category_name,color')->get()
         ], 200);
     }
 
@@ -221,10 +222,56 @@ class TaskController extends Controller
             'success' => true,
             'message' => 'Fetch successfully',
             'data' => Task::where('task_type_id', $id)
-                          ->where('user_id', $user->id)->get()
+                          ->where('user_id', $user->id)
+                          ->with('category:id,category_name,color')->get()
         ], 200);
     }
 
+    public function filter(Request $request)
+    {
+        try {
+            return response()->json([
+                'success' => true,
+                'message' => 'Fetched Successfully',
+                'data' =>  Task::orWhere($this->getSearchFields($request))->get()
+            ], 200);
+        } catch (UnprocessableEntityHttpException $e) {
+            return $this->throwError($e->getMessage());
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    protected function getSearchFields(Request $request) {
+
+        $params = $request->query->all();
+
+        $where = [];
+
+        foreach($params as $field => $value) {
+
+            if(!in_array($field, $this->getValidSearchFields())) {
+                throw new UnprocessableEntityHttpException('Invalid search field.');
+            }
+
+            $where[] =  [$field, 'like', "%{$value}%"];
+        }
+
+        return $where;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getValidSearchFields()
+    {
+        return [
+            'task_name',
+            'task_desc'
+        ];
+    }
 
 
 }
