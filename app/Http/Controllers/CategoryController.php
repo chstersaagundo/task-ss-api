@@ -27,14 +27,12 @@ class CategoryController extends Controller
         //kalibog shyet ahaha
         $user = Auth::user();
         $datas = User::where('email', $user->email)->first();
-        $category = Category::where('user_id', $datas->id)->get();
+        $categories = Category::where('user_id', $datas->id)->get();
 
         return response()->json([
             'success' => true,
             'message' => 'Fetch successfully',
-            'data' => [
-                "data" => $category
-            ]
+            'data' => $categories
         ], 200);
     }
 
@@ -64,9 +62,7 @@ class CategoryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Adding Category Succesful!',
-                "data" => [
-                    "data" => $data
-                ]
+                "data" => $data
             ], 200);
         }
         

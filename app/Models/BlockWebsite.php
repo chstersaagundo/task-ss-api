@@ -5,23 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class BlockWebsite extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'category_name',
-        'category_desc',
-        'color'
+        'website_link',
+        'website_name',
+        'is_include'
     ];
 
-    public function tasks() {
-        return $this->hasMany(Task::class);
-    }
+    protected $casts = [
+        'is_verified' => 'boolean',
+    ];
 
     public function user() {
         return $this->belongsTo(User::class);
     }
-    
 }

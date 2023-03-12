@@ -28,6 +28,23 @@ class DatabaseSeeder extends Seeder
             TaskTypeSeeder::class
         ]);
 
-        
+        $users = \App\Models\User::factory()->count(2)->create();
+
+        foreach ($users as $user) {
+            $categories = \App\Models\Category::factory()->count(2)->create([
+                'user_id' => $user->id
+            ]);
+    
+            foreach ($categories as $category) {
+                \App\Models\Task::factory()->count(2)->create([
+                    'category_id' => $category['id'],
+                    'user_id' => $user->id
+                ]);
+            }
+        }
+
+        $this->call([
+            BlockWebsiteSeeder::class
+        ]);
     }
 }
