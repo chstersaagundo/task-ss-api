@@ -48,8 +48,12 @@ Route::prefix('user')->group(function() {
 
         //Feedback Routes
         Route::resource('feedbacks', FeedbackController::class);
+
         Route::resource('blockwebsites', BlockWebsiteController::class);
     });
+
+    //Website Blocker routes //// for testing
+    //Route::resource('blockwebsites', BlockWebsiteController::class);
     Route::get('blockwebsites/{id}',[BlockWebsiteController::class, 'getBlockWebsitesById']);
 
 });

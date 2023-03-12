@@ -5,11 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\BlockWebsite;
 use Illuminate\Http\Request;
+use App\Services\BlockWebsiteService;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\BlockWebsiteRequest;
 
+
 class BlockWebsiteController extends Controller
 {
+    private BlockWebsiteService $websiteBlockService;
+
+    public function __construct(BlockWebsiteService $websiteBlockService){
+        $this->websiteBlockService = $websiteBlockService;
+    }   
     /**
      * Display a listing of the resource.
      *
@@ -51,9 +58,26 @@ class BlockWebsiteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BlockWebsiteRequest $request)
     {
         //
+        if($request->validated()) {
+
+            $data = $this->websiteBlockService->create($request->validated());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Adding Website Blocker Succesful!',
+                "data" => [
+                    "data" => $data
+                ]
+            ], 200);
+        }
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not valid'
+        ], 422);
     }
 
     /**
@@ -64,7 +88,20 @@ class BlockWebsiteController extends Controller
      */
     public function show($id)
     {
-        //
+        $blockwebsite = BlockWebsite::find($id);
+        if ($blockwebsite) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Found',
+                'data' => $blockwebsite
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Data not found'
+        ], 404);
+        
     }
 
     /**
@@ -85,9 +122,22 @@ class BlockWebsiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BlockWebsiteRequest $request, $id)
     {
-        //
+        $blockwebsite = BlockWebsite::find($id);
+        if ($blockwebsite){
+            $blockwebsite->update($request->all());
+            return response()->json([
+                'success' => true,
+                'message' => 'Website Block Successfully Updated',
+                'data' => $blockwebsite
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Data not found'
+        ], 404);
     }
 
     /**
@@ -98,7 +148,12 @@ class BlockWebsiteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        BlockWebsite::where('id', $id)->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Feedback Removed Successfully',
+            'data' => $id
+        ], 200);
     }
 
     public function getBlockWebsitesById($id)
@@ -119,3 +174,6 @@ class BlockWebsiteController extends Controller
         ], 422);
     }
 }
+
+    
+
