@@ -54,8 +54,7 @@ Route::prefix('user')->group(function() {
 
     //Website Blocker routes //// for testing
     //Route::resource('blockwebsites', BlockWebsiteController::class);
-    Route::get('blockwebsites/{id}',[BlockWebsiteController::class, 'getBlockWebsitesById']);
-
+    //Route::get('blockwebsites/{id}',[BlockWebsiteController::class, 'getBlockWebsitesById']);
 });
 
 

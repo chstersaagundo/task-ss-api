@@ -28,18 +28,11 @@ class BlockWebsiteController extends Controller
         $datas = User::where('email', $user->email)->first();
         $blockwebsite = BlockWebsite::where('user_id', $datas->id)->get();
 
-        if($blockwebsite) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Fetch successfully',
-                'data' => $blockwebsite
-            ], 200);
-        }
-
         return response()->json([
-            'success' => false,
-            'message' => 'Fetch Failed'
-        ], 422);
+            'success' => true,
+            'message' => 'Fetch successfully',
+            'data' => $blockwebsite
+        ], 200);
     }
 
     /**
@@ -156,23 +149,23 @@ class BlockWebsiteController extends Controller
         ], 200);
     }
 
-    public function getBlockWebsitesById($id)
-    {
-        $block_websites = BlockWebsite::where('user_id', $id)->get();
+    // public function getBlockWebsitesById($id)
+    // {
+    //     $block_websites = BlockWebsite::where('user_id', $id)->get();
 
-        if(count($block_websites) > 0) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Fetch successfully',
-                'data' => $block_websites
-            ], 200);
-        }
+    //     if(count($block_websites) > 0) {
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Fetch successfully',
+    //             'data' => $block_websites
+    //         ], 200);
+    //     }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Fetch Failed'
-        ], 422);
-    }
+    //     return response()->json([
+    //         'success' => false,
+    //         'message' => 'Fetch Failed'
+    //     ], 422);
+    // }
 }
 
     
