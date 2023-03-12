@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('block_websites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->index('categories_user_id_foreign');
+            $table->unsignedBigInteger('user_id')->index('block_websites_user_id_foreign');
             $table->string('website_link', 255);
             $table->string('website_name', 255);
             $table->boolean('is_include')->default(true);
