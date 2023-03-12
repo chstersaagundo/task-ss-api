@@ -17,7 +17,22 @@ class BlockWebsiteController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $datas = User::where('email', $user->email)->first();
+        $blockwebsite = BlockWebsite::where('user_id', $datas->id)->get();
+
+        if($blockwebsite) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Fetch successfully',
+                'data' => $blockwebsite
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Fetch Failed'
+        ], 422);
     }
 
     /**
@@ -90,7 +105,7 @@ class BlockWebsiteController extends Controller
     {
         $block_websites = BlockWebsite::where('user_id', $id)->get();
 
-        if($block_websites) {
+        if(count($block_websites) > 0) {
             return response()->json([
                 'success' => true,
                 'message' => 'Fetch successfully',
