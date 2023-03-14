@@ -75,7 +75,8 @@ class UserService
             ]);
         }
     }
-    
+
+    //CHANGE PASSWORD
     public function change_password(array $data)
     {
         if($this->check_email_exist($data['email']))

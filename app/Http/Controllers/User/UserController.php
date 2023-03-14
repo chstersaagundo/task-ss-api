@@ -38,23 +38,6 @@ class UserController extends Controller
         ]);
     }
 
-    
-    // public function updateProfile(UserRequest $request)
-    // {
-    //     $data = $request->validated();
-    //     $user = Auth::user();
-
-    //     $data['user_id'] = $user->id;
-    //     logger()->info($data);
-
-    //     $user_details = $this->userService->update_user_details($data);
-
-    //     return response()->json([
-    //         "success" => true,
-    //         "message" => "Update Successful.",
-    //         "data"    => new UserDetailResource($user_details)
-    //     ]);
-    // }
 
     public function getAllUsers()
     {
