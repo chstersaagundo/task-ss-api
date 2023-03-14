@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\BlockWebsiteController;
 use App\Http\Controllers\User\UserAuthController;
+use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,12 @@ Route::prefix('user')->group(function() {
 
     Route::group(['middleware' => ['auth:sanctum']], function() {
         Route::post('/auth/logout', [UserAuthController::class, 'logout']);
+
+        //User Routes
+        Route::get('/users', [UserController::class, 'getAllUsers']);
+        Route::get('/profile', [UserController::class, 'getProfile']);
+        Route::patch('/profile', [UserController::class, 'updateProfile']);
+        Route::post('/password/reset', [UserController::class, 'changePassword']);
 
         //Category Routes
         Route::resource('categories', CategoryController::class);

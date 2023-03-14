@@ -76,4 +76,16 @@ class UserService
         }
     }
     
+    public function change_password(array $data)
+    {
+        if($this->check_email_exist($data['email']))
+        {
+            $user = User::where('email',$data['email'])->first();
+
+            $user->password = bcrypt($data['new_password']);
+            $user->save();
+        }
+    }
+
+    
 }

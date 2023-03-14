@@ -6,7 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\RegisterRequest;
+// use App\Http\Requests\UserRequest;
 use App\Services\UserService;
 
 
@@ -49,7 +50,7 @@ class UserAuthController extends Controller{
      *  }
      * }
      */
-    public function register(UserRequest $request) {
+    public function register(RegisterRequest $request) {
       
 
         if($request->validated()) {
