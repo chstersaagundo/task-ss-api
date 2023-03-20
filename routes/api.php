@@ -37,6 +37,7 @@ Route::prefix('user')->group(function() {
         Route::resource('categories', CategoryController::class);
 
         //Task Routes
+        Route::get('/tasks/recent', [TaskController::class, 'recent']);
         Route::get('/tasks/filter', [TaskController::class, 'filter']);
         Route::get('tasks/starred', [TaskController::class, 'allStarredTasks']);
         Route::get('tasks/type/{id}', [TaskController::class, 'getTaskType']);

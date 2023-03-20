@@ -269,9 +269,33 @@ class TaskController extends Controller
     {
         return [
             'task_name',
-            'task_desc'
+            'task_desc',
+            'status',
+            'priority',
+            'start_date',
+            'end_date',
+            'start_time',
+            'end_time',
+            'updated_at'
         ];
     }
 
+    public function recent()
+    {
+        $user = Auth::user();
+        $task = Task::latest('updated_at')->where('user_id', $user->id)->with('category:id,category_name,color')->get();
 
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch successfully',
+            'data' => $task
+        ], 200);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Fetch Failed'
+        ], 422);
+
+
+    }
 }
