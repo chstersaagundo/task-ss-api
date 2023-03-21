@@ -50,6 +50,7 @@ Route::prefix('user')->group(function() {
         //Feedback Routes
         Route::resource('feedbacks', FeedbackController::class);
 
+        Route::get('blockwebsites/includes', [BlockWebsiteController::class, 'allIncludes']);
         Route::resource('blockwebsites', BlockWebsiteController::class);
     });
 

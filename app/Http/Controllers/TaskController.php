@@ -229,11 +229,13 @@ class TaskController extends Controller
 
     public function filter(Request $request)
     {
+        $user = Auth::user();
+        
         try {
             return response()->json([
                 'success' => true,
                 'message' => 'Fetched Successfully',
-                'data' =>  Task::orWhere($this->getSearchFields($request))->get()
+                'data' =>  Task::orWhere($this->getSearchFields($request))->where('user_id', $user->id)->get()
             ], 200);
         } catch (UnprocessableEntityHttpException $e) {
             return $this->throwError($e->getMessage());

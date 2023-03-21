@@ -144,8 +144,21 @@ class BlockWebsiteController extends Controller
         BlockWebsite::where('id', $id)->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Feedback Removed Successfully',
+            'message' => 'Website Removed Successfully',
             'data' => $id
+        ], 200);
+    }
+
+    public function allIncludes()
+    {
+        $user = Auth::user();
+        $datas = User::where('email', $user->email)->first();
+        $blockwebsite = BlockWebsite::where('user_id', $datas->id)->where('is_include', true)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch successfully',
+            'data' => $blockwebsite
         ], 200);
     }
 
