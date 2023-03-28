@@ -18,7 +18,7 @@ class TaskFactory extends Factory
     public function definition()
     {
         $priority = $this->faker->randomElement(['P4', 'P3', 'P2', 'P1']);
-        $status = $this->faker->randomElement(['completed', 'pending', 'abandoned']);
+        $status = $this->faker->randomElement(['completed', 'pending']);
 
         return [
             'category_id' => Category::factory(),

@@ -26,7 +26,7 @@ class CategoryRequest extends FormRequest
         return [
             //
             'category_name'      => ['required', 'string', 'max:100'],
-            'category_desc'      => ['sometimes', 'string', 'max:100'],
+            'category_desc'      => ['sometimes', 'nullable', 'string', 'max:100'],
             'color'              => ['required', 'string', 'max:20'],
         ];
     }

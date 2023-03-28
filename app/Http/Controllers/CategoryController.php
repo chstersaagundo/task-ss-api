@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Task;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
@@ -145,11 +146,22 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+        $tasks = Task::where('category_id', $id)->get();
+
+        if($tasks->count() > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete category because there are tasks associated with it.'
+            ], 422);
+        } 
+        
         Category::where('id', $id)->delete();
+        
         return response()->json([
             'success' => true,
             'message' => 'Category Removed Successfully',
             'data' => $id
         ], 200);
     }
+
 }

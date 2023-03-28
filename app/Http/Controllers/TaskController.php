@@ -235,7 +235,7 @@ class TaskController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Fetched Successfully',
-                'data' =>  Task::orWhere($this->getSearchFields($request))->where('user_id', $user->id)->get()
+                'data' =>  Task::OrWhere($this->getSearchFields($request))->where('user_id', $user->id)->get()
             ], 200);
         } catch (UnprocessableEntityHttpException $e) {
             return $this->throwError($e->getMessage());
@@ -258,7 +258,7 @@ class TaskController extends Controller
                 throw new UnprocessableEntityHttpException('Invalid search field.');
             }
 
-            $where[] =  [$field, 'like', "%{$value}%"];
+            $where[] =  [$field, "like", "%{$value}%", "or"];
         }
 
         return $where;
@@ -278,7 +278,8 @@ class TaskController extends Controller
             'end_date',
             'start_time',
             'end_time',
-            'updated_at'
+            'updated_at',
+            'category_name'
         ];
     }
 
