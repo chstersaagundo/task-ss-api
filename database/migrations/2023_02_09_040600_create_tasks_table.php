@@ -24,9 +24,9 @@ return new class extends Migration
             $table->string('priority', 50);
             $table->string('status', 50);
             $table->date('start_date', $precision = 0);
-            $table->date('end_date', $precision = 0);
+            $table->date('end_date', $precision = 0)->nullable();
             $table->time('start_time', $precision = 0);
-            $table->time('end_time', $precision = 0);
+            $table->time('end_time', $precision = 0)->nullable();
             
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onUpdate('NO ACTION')->onDelete('cascade');
