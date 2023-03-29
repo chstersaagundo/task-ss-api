@@ -34,8 +34,8 @@ class TaskRequest extends FormRequest
             'status'             => ['required', 'string'],
             'start_date'         => ['date_format:Y-m-d', 'after_or_equal:today'],
             'end_date'           => ['nullable', 'date_format:Y-m-d', 'after_or_equal:start_date'],
-            'start_time'         => ['date_format:H:i:s'],
-            'end_time'           => ['nullable', 'date_format:H:i:s'],
+            'start_time'         => ['date_format:H:i', 'after_or_equal:now'],
+            'end_time'           => ['nullable', 'date_format:H:i', 'after_or_equal:start_time'],
         ];
     }
 }
