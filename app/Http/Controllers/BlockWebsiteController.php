@@ -31,9 +31,7 @@ class BlockWebsiteController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Fetch successfully',
-            'data' => [
-                "data" => $blockwebsite
-            ]
+            'data' => $blockwebsite
         ], 200);
     }
 
@@ -146,28 +144,41 @@ class BlockWebsiteController extends Controller
         BlockWebsite::where('id', $id)->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Feedback Removed Successfully',
+            'message' => 'Website Removed Successfully',
             'data' => $id
         ], 200);
     }
 
-    public function getBlockWebsitesById($id)
+    public function allIncludes()
     {
-        $block_websites = BlockWebsite::where('user_id', $id)->get();
-
-        if($block_websites) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Fetch successfully',
-                'data' => $block_websites
-            ], 200);
-        }
+        $user = Auth::user();
+        $datas = User::where('email', $user->email)->first();
+        $blockwebsite = BlockWebsite::where('user_id', $datas->id)->where('is_include', true)->get();
 
         return response()->json([
-            'success' => false,
-            'message' => 'Fetch Failed'
-        ], 422);
+            'success' => true,
+            'message' => 'Fetch successfully',
+            'data' => $blockwebsite
+        ], 200);
     }
+
+    // public function getBlockWebsitesById($id)
+    // {
+    //     $block_websites = BlockWebsite::where('user_id', $id)->get();
+
+    //     if(count($block_websites) > 0) {
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Fetch successfully',
+    //             'data' => $block_websites
+    //         ], 200);
+    //     }
+
+    //     return response()->json([
+    //         'success' => false,
+    //         'message' => 'Fetch Failed'
+    //     ], 422);
+    // }
 }
 
     

@@ -32,10 +32,10 @@ class TaskRequest extends FormRequest
             'is_starred'         => ['sometimes', 'boolean'],
             'priority'           => ['required', 'string'],
             'status'             => ['required', 'string'],
-            'start_date'         => ['date_format:Y-m-d'],
-            'end_date'           => ['date_format:Y-m-d'],
+            'start_date'         => ['date_format:Y-m-d', 'after_or_equal:today'],
+            'end_date'           => ['nullable', 'date_format:Y-m-d', 'after_or_equal:start_date'],
             'start_time'         => ['date_format:H:i:s'],
-            'end_time'           => ['date_format:H:i:s'],
+            'end_time'           => ['nullable', 'date_format:H:i:s'],
         ];
     }
 }
