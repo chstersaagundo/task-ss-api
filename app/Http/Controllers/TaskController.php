@@ -30,14 +30,14 @@ class TaskController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Fetch successfully',
+            'message' => 'Fetch Successfully',
             'data' => $task
         ], 200);
         // if ($category) {
         //     $task = Task::where('category_id', $category->id)->get();
         //     return response()->json([
         //         'success' => true,
-        //         'message' => 'Fetch successfully',
+        //         'message' => 'Fetch Successfully',
         //         'data' => [
         //             "data" => $task
         //         ]
@@ -92,7 +92,7 @@ class TaskController extends Controller
                 $task->save();
                 return response()->json([
                     'success' => true,
-                    'message' => 'Adding Task Succesful!',
+                    'message' => 'Adding Task Successfully',
                     "data" => $task
                 ], 200);
             }
@@ -123,7 +123,7 @@ class TaskController extends Controller
             $task = Task::find($id);
             return response()->json([
                 'success' => true,
-                'message' => 'Fetch successfully',
+                'message' => 'Fetch Successfully',
                 'data' => $task
             ], 200);
         }
@@ -161,14 +161,14 @@ class TaskController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Task Successfully Updated',
+                'message' => 'Task Updated Successfully',
                 'data' => $task
             ], 200);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Task not found'
+            'message' => 'Task Not Found'
         ], 404);
     }
 
@@ -183,7 +183,7 @@ class TaskController extends Controller
         Task::where('id', $id)->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Removed Successfully',
+            'message' => 'Task Removed Successfully',
             'data' => $id
         ], 200);
 
@@ -195,7 +195,7 @@ class TaskController extends Controller
         
         return response()->json([
             'success' => true,
-            'message' => 'Fetch successfully',
+            'message' => 'Fetch Successfully',
             'data' => Task::where('category_id', $id)
                           ->where('user_id', $user->id)->get()
         ], 200);
@@ -207,7 +207,7 @@ class TaskController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Fetch successfully',
+            'message' => 'Fetch Successfully',
             'data' => Task::where('is_starred', 1)
                           ->where('user_id', $user->id)
                           ->with('category:id,category_name,color')->get()
@@ -220,7 +220,7 @@ class TaskController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Fetch successfully',
+            'message' => 'Fetch Successfully',
             'data' => Task::where('task_type_id', $id)
                           ->where('user_id', $user->id)
                           ->with('category:id,category_name,color')->get()
@@ -235,12 +235,35 @@ class TaskController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Fetched Successfully',
-                'data' =>  Task::OrWhere($this->getSearchFields($request))->where('user_id', $user->id)->get()
+                'data' =>  Task::OrWhere($this->getSearchFields($request))
+                        ->where('user_id', $user->id)
+                        ->with('category:id,category_name,color')->get()
             ], 200);
         } catch (UnprocessableEntityHttpException $e) {
             return $this->throwError($e->getMessage());
         }
     }
+
+    public function sortFilter(Request $request, $by = 'id', $order = 'asc')
+    {
+        $user = Auth::user();
+        $tasks = Task::OrWhere($this->getSearchFields($request))
+                ->orderBy($by, $order)
+                ->where('user_id', $user->id)
+                ->with('category:id,category_name,color')->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch Successfully!',
+            'data' => $tasks
+        ], 200);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Fetch Failed.'
+        ], 422);
+    }
+    
 
     /**
      * @param Request $request
@@ -270,9 +293,12 @@ class TaskController extends Controller
     protected function getValidSearchFields()
     {
         return [
+            'category_id',
+            'task_type_id',
             'task_name',
             'task_desc',
             'status',
+            'is_starred',
             'priority',
             'start_date',
             'end_date',
@@ -290,13 +316,35 @@ class TaskController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Fetch successfully',
+            'message' => 'Fetch Successfully',
             'data' => $task
         ], 200);
 
         return response()->json([
             'success' => false,
             'message' => 'Fetch Failed'
+        ], 422);
+
+
+    }
+
+    public function sort($by, $order, $category ='status', $id = 'pending')
+    {
+        $user = Auth::user();
+        $tasks = Task::orderBy($by, $order)
+                ->where('user_id', $user->id)
+                ->where($category, $id)
+                ->with('category:id,category_name,color')->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch Successfully!',
+            'data' => $tasks
+        ], 200);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Fetch Failed.'
         ], 422);
 
 
