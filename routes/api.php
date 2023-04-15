@@ -48,22 +48,18 @@ Route::prefix('user')->group(function() {
         Route::get('/tasks/filter', [TaskController::class, 'filter']);
         Route::get('tasks/starred', [TaskController::class, 'allStarredTasks']);
         Route::get('tasks/type/{id}', [TaskController::class, 'getTaskType']);
-
-        Route::resource('tasks', TaskController::class);
-
-        //Task Routes by Category
         Route::get('tasks/category/{id}', [TaskController::class, 'allTasksByCategory']);
-
+        Route::get('/tasks/sortfilter/{by?}/{order?}', [TaskController::class, 'sortFilter']);
+        // Route::get('tasks/{by}/{order}/{category?}/{id?}', [TaskController::class, 'sort']);
+        Route::resource('tasks', TaskController::class);
+        
         //Feedback Routes
         Route::resource('feedbacks', FeedbackController::class);
 
+        //BlockWebsites Routes
         Route::get('blockwebsites/includes', [BlockWebsiteController::class, 'allIncludes']);
         Route::resource('blockwebsites', BlockWebsiteController::class);
     });
-
-    //Website Blocker routes //// for testing
-    //Route::resource('blockwebsites', BlockWebsiteController::class);
-    //Route::get('blockwebsites/{id}',[BlockWebsiteController::class, 'getBlockWebsitesById']);
 });
 
 
