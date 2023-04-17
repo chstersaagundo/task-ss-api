@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\BlockWebsiteController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TaskScheduleController;
 use App\Http\Controllers\User\UserAuthController;
 
@@ -60,6 +61,8 @@ Route::prefix('user')->group(function() {
 
         Route::get('blockwebsites/includes', [BlockWebsiteController::class, 'allIncludes']);
         Route::resource('blockwebsites', BlockWebsiteController::class);
+
+        Route::post('/subscription', [SubscriptionController::class, 'storeSubData']);
     });
 
     //Website Blocker routes //// for testing
@@ -69,5 +72,6 @@ Route::prefix('user')->group(function() {
 });
 
 Route::post('/schedule', [TaskScheduleController::class, 'store']);
+
 
 
