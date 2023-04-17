@@ -13,13 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_logins', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->index('user_logins_user_id_foreign');
-            $table->string('device')->nullable();
-            $table->timestamp('logged_in_at');
+        Schema::create('subscriptions', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->index('subscriptions_user_id_foreign');
+            $table->unsignedBigInteger('sub_type_id')->index('subscriptions_sub_type_id_foreign');
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('cascade');
+            $table->foreign('sub_type_id')->references('id')->on('subscription_types')->onUpdate('NO ACTION')->onDelete('cascade');
         });
     }
 
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_login');
+        Schema::dropIfExists('subscriptions');
     }
 };
