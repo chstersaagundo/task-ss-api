@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\BlockWebsiteController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\TaskScheduleController;
 use App\Http\Controllers\User\UserAuthController;
 
 /*
@@ -33,6 +36,12 @@ Route::prefix('user')->group(function() {
     Route::group(['middleware' => ['auth:sanctum']], function() {
         Route::post('/auth/logout', [UserAuthController::class, 'logout']);
 
+        //User Routes
+        Route::get('/users', [UserController::class, 'getAllUsers']);
+        Route::get('/profile', [UserController::class, 'getProfile']);
+        Route::patch('/profile', [UserController::class, 'updateProfile']);
+        Route::post('/password/reset', [UserController::class, 'changePassword']);
+        Route::delete('/deleteUser/{id}', [UserController::class, 'destroy']);
         //Category Routes
         Route::resource('categories', CategoryController::class);
 
@@ -52,7 +61,12 @@ Route::prefix('user')->group(function() {
         //BlockWebsites Routes
         Route::get('blockwebsites/includes', [BlockWebsiteController::class, 'allIncludes']);
         Route::resource('blockwebsites', BlockWebsiteController::class);
+
+        Route::post('/subscription', [SubscriptionController::class, 'storeSubData']);
     });
 });
+
+Route::post('/schedule', [TaskScheduleController::class, 'store']);
+
 
 
