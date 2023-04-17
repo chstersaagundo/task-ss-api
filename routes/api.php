@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\BlockWebsiteController;
-use App\Http\Controllers\User\UserAuthController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\BlockWebsiteController;
+use App\Http\Controllers\TaskScheduleController;
+use App\Http\Controllers\User\UserAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,7 @@ Route::prefix('user')->group(function() {
         Route::get('/profile', [UserController::class, 'getProfile']);
         Route::patch('/profile', [UserController::class, 'updateProfile']);
         Route::post('/password/reset', [UserController::class, 'changePassword']);
-
+        Route::delete('/deleteUser/{id}', [UserController::class, 'destroy']);
         //Category Routes
         Route::resource('categories', CategoryController::class);
 
@@ -64,6 +65,9 @@ Route::prefix('user')->group(function() {
     //Website Blocker routes //// for testing
     //Route::resource('blockwebsites', BlockWebsiteController::class);
     //Route::get('blockwebsites/{id}',[BlockWebsiteController::class, 'getBlockWebsitesById']);
+    
 });
+
+Route::post('/schedule', [TaskScheduleController::class, 'store']);
 
 

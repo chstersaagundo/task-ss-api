@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 
-use App\Http\Requests\UserRequest;
-use App\Http\Requests\ChangePasswordRequest;
 use App\Services\UserService;
+use App\Http\Requests\UserRequest;
+use App\Http\Controllers\Controller;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ChangePasswordRequest;
 
 /**
  * @group User
@@ -81,7 +82,31 @@ class UserController extends Controller
             'data' => $user
         ], 200);
 
+        // $user = User::find($id);
+        // if ($user){
+        //     $user->update($request->all());
+        //     return response()->json([
+        //         'success' => true,
+        //         'message' => 'User Successfully Updated',
+        //         'data' => $user
+        //     ], 200);
+        // }
+
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => 'User not found'
+        // ], 404);
+
     }
 
+    public function destroy($id)
+    {
+        User::where('id', $id)->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'User Removed Successfully',
+            'data' => $id
+        ], 200);
+    }
 
 }
