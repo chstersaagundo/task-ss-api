@@ -11,6 +11,17 @@ class Subscription extends Model
 
     protected $fillable = [
         'user_id',
-        'sub_type_id'
+        'subscription_type_id',
+        'status',
+        'end_date'
     ];
+    
+    public function subscription_type() {
+        return $this->belongsTo(SubscriptionType::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
 }

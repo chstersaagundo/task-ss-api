@@ -7,29 +7,38 @@ use Illuminate\Support\Str;
 use App\Models\Subscription;
 use App\Models\SubscriptionType;
 use Illuminate\Support\Facades\Auth;
-
-//use \Laravel\Sanctum\PersonalAccessToken;
-
+use Carbon\Carbon;
 
 class SubscriptionService
 {
+    public function checkActiveSubscription() {
+        $user = Auth::user();
+        $sub = Subscription::where('user_id', $user->id)
+        ->where('status', 'active')->get();
+
+        return $sub->isNotEmpty();
+    }
     
-    public function create()
+    public function create(array $data)
     {
         $user = Auth::user();
-        $sub_type = SubscriptionType::all();
+        $date = Carbon::now();
+        $sub_type = SubscriptionType::where('id', $data['subscription_type_id'])->first();
+
+        if($sub_type->interval == "month") {
+            $date->addMonth();
+        }
+
+        if($sub_type->interval == "year") {
+            $date->addYear();
+        }
 
         Subscription::create([
             'user_id' => $user->id, 
-            'sub_type_id' => '1'
+            'subscription_type_id' => $sub_type->id,
+            'status' => 'active',
+            'end_date' => $date->format('Y-m-d H:i:s'),
         ]);
-
-        
     }
-
-
-
-    
-
     
 }

@@ -62,11 +62,10 @@ Route::prefix('user')->group(function() {
         Route::get('blockwebsites/includes', [BlockWebsiteController::class, 'allIncludes']);
         Route::resource('blockwebsites', BlockWebsiteController::class);
 
-        Route::post('/subscription', [SubscriptionController::class, 'storeSubData']);
+        Route::post('/subscribe', [SubscriptionController::class, 'storeSubData']);
+        Route::get('/currentplan', [SubscriptionController::class, 'currentPlan']);
+        Route::resource('subscriptions', SubscriptionController::class);
     });
 });
 
 Route::post('/schedule', [TaskScheduleController::class, 'store']);
-
-
-

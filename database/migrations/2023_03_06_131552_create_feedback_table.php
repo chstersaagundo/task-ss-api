@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('ratings', 10)->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('cascade');
         });
     }
 

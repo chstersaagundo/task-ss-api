@@ -31,7 +31,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onUpdate('NO ACTION')->onDelete('cascade');
             $table->foreign('task_type_id')->references('id')->on('task_types')->onUpdate('NO ACTION')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('cascade');
         });
     }
 

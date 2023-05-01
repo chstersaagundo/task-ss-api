@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('sub_type_name', 50);
             $table->string('sub_type_desc', 255);
+            $table->string('interval', 255);
             $table->decimal('sub_fee_price', 12,2);
             $table->timestamps();
         });
