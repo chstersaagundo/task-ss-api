@@ -19,7 +19,15 @@ class SubscriptionTypeSeeder extends Seeder
         SubscriptionType::create([
             'sub_type_name' => 'pro',
             'sub_type_desc' => 'Pro Subscription',
+            'interval' => 'month',
             'sub_fee_price' => '500.00',
+        ]);
+
+        SubscriptionType::create([
+            'sub_type_name' => 'pro',
+            'sub_type_desc' => 'Pro Subscription',
+            'interval' => 'year',
+            'sub_fee_price' => '6000.00',
         ]);
 
         // SubscriptionType::create([

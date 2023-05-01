@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('is_include')->default(true);
             
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('cascade');
         });
     }
 

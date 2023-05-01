@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('device')->nullable();
             $table->timestamp('logged_out_at');
 
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('NO ACTION')->onDelete('cascade');
         });
     }
 

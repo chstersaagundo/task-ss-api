@@ -12,6 +12,11 @@ class SubscriptionType extends Model
     protected $fillable = [
         'sub_type_name',
         'sub_type_desc',
+        'interval',
         'sub_fee_price'
     ];
+
+    public function subscriptions() {
+        return $this->hasMany(Subscription::class);
+    }
 }
