@@ -150,4 +150,17 @@ class FeedbackController extends Controller
             'data' => $id
         ], 200);
     }
+
+    public function allFeedbacks()
+    {
+        $feedback = Feedback::with('user')->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch successfully',
+            'data' => [
+                "data" => $feedback
+            ]
+        ], 200);
+    }
 }

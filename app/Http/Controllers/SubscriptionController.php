@@ -30,6 +30,17 @@ class SubscriptionController extends Controller
         ], 200);
     }
 
+    public function allSubscriptions()
+    {
+        $user = Auth::user();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch successfully',
+            'data' => $subscription = Subscription::with('subscription_type')->get(),
+        ], 200);
+    }
+
     public function storeSubData(SubscriptionRequest $request)
     {
         if($request->validated()) {
