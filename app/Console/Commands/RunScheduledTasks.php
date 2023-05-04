@@ -35,15 +35,9 @@ class RunScheduledTasks extends Command
         $startDate = $this->option('--start_date');
         $startTime = $this->option('--start_time');
 
-        // Find the task to run
         $task = Task::findOrFail($taskId);
-
-        // Run the task
         Log::info("Running scheduled task: {$task->task_name}");
 
-        // Perform any necessary task logic here...
-        
-        // Schedule the task to run again if necessary
         if ($repeatType == 'daily') {
             $nextRun = Carbon::parse($startDate)->addDay();
         } elseif ($repeatType == 'weekly') {
@@ -51,16 +45,13 @@ class RunScheduledTasks extends Command
         } elseif ($repeatType == 'monthly') {
             $nextRun = Carbon::parse($startDate)->addMonth();
         } else {
-            // Do not schedule another run
             return;
         }
 
-        // Update the task with the next run date and time
         $task->start_date = $nextRun->format('Y-m-d');
         $task->start_time = $startTime;
         $task->save();
 
-        // Schedule the task to run again
         $command = 'scheduled_task:run';
         $arguments = [
             '--task_id' => $taskId,
