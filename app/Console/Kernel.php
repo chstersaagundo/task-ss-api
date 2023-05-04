@@ -13,10 +13,14 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+    protected $commands = [
+        Commands\RunScheduledTasks::class,
+    ];
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('tasks:run-scheduled')->everyMinute();
+        $schedule->command('schedule:run')
+                 ->everyMinute();
     }
 
     /**
@@ -26,8 +30,9 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        // $this->load(__DIR__.'/Commands');
 
+        // require base_path('routes/console.php');
         require base_path('routes/console.php');
     }
 }

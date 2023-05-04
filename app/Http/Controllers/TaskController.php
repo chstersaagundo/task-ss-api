@@ -9,7 +9,11 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
 use App\Http\Requests\TaskRequest;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
+use App\Console\Commands\RunScheduledTasks;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class TaskController extends Controller
 {
@@ -88,8 +92,21 @@ class TaskController extends Controller
                 $task->end_date = $request->end_date;
                 $task->start_time = $request->start_time;
                 $task->end_time = $request->end_time;
-    
+                $task->repeat_type = $request->repeat_type;
+                
+                
+
+                $command = 'schedule:run';
+                $arguments = [
+                    '--task_id' => $task->id,
+                    '--repeat_type' => $request->repeat_type,
+                    '--start_date' => $request->start_date,
+                    '--start_time' => $request->start_time
+                ];
+                Artisan::call($command, $arguments);
                 $task->save();
+                
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Adding Task Succesful!',

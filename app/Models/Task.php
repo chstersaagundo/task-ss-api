@@ -21,7 +21,8 @@ class Task extends Model
         'start_date',
         'end_date',
         'start_time',
-        'end_time'
+        'end_time',
+        'repeat_type',
     ];
 
     public function category() {

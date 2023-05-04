@@ -54,6 +54,7 @@ class TaskService
             'end_date' => $data['end_date'], // Y-m-d ex. { 2023-12-13 }
             'start_time' => $data['start_time'], // H:i:s { ex. 18:59:32 }
             'end_time' => $data['end_time'], // H:i:s { ex. 19:00:14 }
+            'repeat_type' => $data['repeat_type'],
         ]);
               
         return $data;
