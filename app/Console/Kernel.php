@@ -15,10 +15,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->command('tasks:run-scheduled')->everyMinute();
+        $schedule->command('tasks:update-status')->everyMinute();
     }
 
+    protected $commands = [
+        \App\Console\Commands\RunScheduledTasks::class,
+    ];
     /**
      * Register the commands for the application.
      *
