@@ -10,6 +10,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\BlockWebsiteController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TaskScheduleController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\User\UserAuthController;
 
 /*
@@ -65,6 +66,9 @@ Route::prefix('user')->group(function() {
         Route::post('/subscribe', [SubscriptionController::class, 'storeSubData']);
         Route::get('/currentplan', [SubscriptionController::class, 'currentPlan']);
         Route::resource('subscriptions', SubscriptionController::class);
+
+
+        Route::get('/notification', [NotificationController::class, 'index']);
     });
 });
 

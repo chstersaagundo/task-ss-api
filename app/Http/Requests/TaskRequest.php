@@ -37,7 +37,8 @@ class TaskRequest extends FormRequest
             'end_date'           => ['nullable','date_format:Y-m-d', 'after_or_equal:start_date'],
             'start_time'         => ['after_or_equal:now'],
             'end_time'           => ['nullable', 'after_or_equal:start_time'],
-            'confirmation'       => ['nullable', 'boolean'],
+            'repeat_type'        => ['nullable', 'string', 'max:100'],
+            'confirmed'          => ['nullable', 'boolean'],
         ];
     }
 }

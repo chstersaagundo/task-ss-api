@@ -7,9 +7,10 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\Notification;
 use App\Services\TaskService;
-use Illuminate\Support\Carbon;
 use App\Http\Requests\TaskRequest;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
@@ -89,11 +90,10 @@ class TaskController extends Controller
             ], 422);
         }
 
-        //parsinggg stard_date, start_time, end_date, end_time //// ex. format: 2023-05-05 23:00:00 
-        $start = Carbon::parse($request->start_date . ' ' . $request->start_time);
-        $end = Carbon::parse($request->end_date . ' ' . $request->end_time);
+        // Check for conflicting tasks
+        $start = $request->start_date.' '.$request->start_time;
+        $end = $request->end_date.' '.$request->end_time;
 
-        //check if tehre are any conflicting tasks
         $conflicting_tasks = Task::where('user_id', $user->id)
             ->where('status', '<>', 'completed')
             ->where(function($query) use ($start, $end) {
@@ -108,14 +108,15 @@ class TaskController extends Controller
             })
             ->get();
 
-        //if naay ni exists
+        // If there are conflicting tasks, ask the user to confirm
         if ($conflicting_tasks->count() > 0) {
-            if (!$request->has('confirmation') || !$request->confirmation) {
+            // There are conflicting tasks, so prompt user for confirmation
+            if (!$request->has('confirmed') || !$request->confirmed) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Hoy! There are already scheduled tasks for this time period. Do you still want to proceed?',
-                    'data' => $conflicting_tasks
-                ], 422);
+                    'message' => 'There are conflicting tasks. Please confirm if you still want to create this task.',
+                    'conflicting_tasks' => $conflicting_tasks,
+                ], 409);
             }
         }
 
@@ -132,8 +133,22 @@ class TaskController extends Controller
         $task->end_date = $request->end_date;
         $task->start_time = $request->start_time;
         $task->end_time = $request->end_time;
+        $task->repeat_type = $request->repeat_type;
 
+        
+        
         $task->save();
+
+        $date = Carbon::parse($task->end_date . ' ' . $task->end_time)->subMinutes(5);
+        
+
+        Notification::create([
+            'user_id' => $user->id, 
+            'task_id' => $task->id,
+            'status' => false,
+            'description' => 'Task ' . $task->task_name . ' is due in 5 minutes',
+            'triggerdate' => $date
+        ]);
 
         return response()->json([
             'success' => true,
