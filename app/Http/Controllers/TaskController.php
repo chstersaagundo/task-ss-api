@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
+use Illuminate\Support\Carbon;
 use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,40 +74,72 @@ class TaskController extends Controller
         //
         $user = Auth::user();
         $category = Category::where('user_id', $user->id)->exists();
-        if ($category) {
-            if($request->validated()) {
-                $task = new Task;
-                $task->category_id = $request->category_id;
-                $task->task_type_id = $request->task_type_id;
-                $task->user_id = $user->id;
-                $task->task_name = $request->task_name;
-                $task->task_desc = $request->task_desc;
-                $task->is_starred = $request->is_starred;
-                $task->priority = $request->priority;
-                $task->status = $request->status;
-                $task->start_date = $request->start_date;
-                $task->end_date = $request->end_date;
-                $task->start_time = $request->start_time;
-                $task->end_time = $request->end_time;
-    
-                $task->save();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Adding Task Successfully',
-                    "data" => $task
-                ], 200);
-            }
 
+        if (!$category) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Category does not exist'
+            ], 422);
+        }
+
+        if (!$request->validated()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Request not valid'
             ], 422);
         }
-        
+
+        //parsinggg stard_date, start_time, end_date, end_time //// ex. format: 2023-05-05 23:00:00 
+        $start = Carbon::parse($request->start_date . ' ' . $request->start_time);
+        $end = Carbon::parse($request->end_date . ' ' . $request->end_time);
+
+        //check if tehre are any conflicting tasks
+        $conflicting_tasks = Task::where('user_id', $user->id)
+            ->where('status', '<>', 'completed')
+            ->where(function($query) use ($start, $end) {
+                $query->where(function($q) use ($start, $end) {
+                    $q->whereBetween('start_date', [$start, $end])
+                        ->orWhereBetween('end_date', [$start, $end]);
+                })
+                ->orWhere(function($q) use ($start, $end) {
+                    $q->where('start_date', '<=', $start)
+                        ->where('end_date', '>=', $end);
+                });
+            })
+            ->get();
+
+        //if naay ni exists
+        if ($conflicting_tasks->count() > 0) {
+            if (!$request->has('confirmation') || !$request->confirmation) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Hoy! There are already scheduled tasks for this time period. Do you still want to proceed?',
+                    'data' => $conflicting_tasks
+                ], 422);
+            }
+        }
+
+        $task = new Task;
+        $task->category_id = $request->category_id;
+        $task->task_type_id = $request->task_type_id;
+        $task->user_id = $user->id;
+        $task->task_name = $request->task_name;
+        $task->task_desc = $request->task_desc;
+        $task->is_starred = $request->is_starred;
+        $task->priority = $request->priority;
+        $task->status = $request->status;
+        $task->start_date = $request->start_date;
+        $task->end_date = $request->end_date;
+        $task->start_time = $request->start_time;
+        $task->end_time = $request->end_time;
+
+        $task->save();
+
         return response()->json([
-            'success' => false,
-            'message' => 'Category not exist'
-        ], 422);
+            'success' => true,
+            'message' => 'Task added successfully',
+            'data' => $task
+        ], 200);
     }
 
     /**

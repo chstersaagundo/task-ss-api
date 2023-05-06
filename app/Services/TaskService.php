@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
+use Exception;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\TaskType;
 use Illuminate\Support\Str;
+use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
-//use \Laravel\Sanctum\PersonalAccessToken;
-
 
 class TaskService
 {
@@ -22,13 +22,32 @@ class TaskService
         //getting the email from the authenticated user
         $datas = User::where('email', $user->email)->first();
         
-        //Save the category infos
-        Category::create([
-            'user_id' => $datas->id, 
-            'category_name' => $data['category_name'],
-            'category_desc' => $data['category_desc'],
-            'color' => $data['color']
-        ]);
+        $subscription = Subscription::where('user_id', $user->id)->first();
+        $status = $subscription ? $subscription->status : null;
+        
+        //checking if the status in Subscription table is marked as active
+        if ($status === 'active') {
+            //if so char, create the category LIMITLESSSSSS
+            Category::create([
+                'user_id' => $datas->id, 
+                'category_name' => $data['category_name'],
+                'category_desc' => $data['category_desc'],
+                'color' => $data['color']
+            ]);
+        }
+        else {
+            //otherwise, limit to 5 categories only
+            $category_count = Category::where('user_id', $datas->id)->count();
+            if ($category_count >= 5) {
+                throw new Exception('You have reached the limit of 5 categories. Subscribe dayon para mapun an harhar.');
+            }
+            Category::create([
+                'user_id' => $datas->id, 
+                'category_name' => $data['category_name'],
+                'category_desc' => $data['category_desc'],
+                'color' => $data['color']
+            ]);
+        }
 
         return $data;
     }

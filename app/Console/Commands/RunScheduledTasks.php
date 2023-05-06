@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\TaskScheduler;
+use Carbon\Carbon;
+use App\Models\Task;
 use Illuminate\Console\Command;
 
 class RunScheduledTasks extends Command
@@ -12,14 +13,14 @@ class RunScheduledTasks extends Command
      *
      * @var string
      */
-    protected $signature = 'tasks:run-scheduled';
+    protected $signature = 'tasks:update-status';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Run scheduled tasks';
+    protected $description = 'Update task status if end date is lapas';
 
     /**
      * Execute the console command.
@@ -28,15 +29,15 @@ class RunScheduledTasks extends Command
      */
     public function handle()
     {
-        $now = now();
-        $schedules = TaskScheduler::where('hour', $now->hour)
-            ->where('day', $now->day)
-            ->where('month', $now->month)
-            ->where('day_of_week', $now->dayOfWeek)
-            ->get();
-
-        foreach ($schedules as $schedule) {
-            $schedule->task->run();
+        $now = Carbon::now();
+        $tasks = Task::where('status', 'pending')
+                    ->where('end_date', '<=', $now->toDateString())
+                    ->where('end_time', '<', $now->toTimeString())
+                    ->get();
+    
+        foreach ($tasks as $task) {
+            $task->status = 'overdue';
+            $task->save();
         }
     }
 }
