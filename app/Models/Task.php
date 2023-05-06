@@ -21,7 +21,8 @@ class Task extends Model
         'start_date',
         'end_date',
         'start_time',
-        'end_time'
+        'end_time',
+        'repeat_type',
     ];
 
     public function category() {
@@ -34,5 +35,9 @@ class Task extends Model
 
     public function task_type() {
         return $this->belongsTo(TaskType::class);
+    }
+
+    public function notifications() {
+        return $this->hasOne(Notification::class);
     }
 }

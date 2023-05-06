@@ -27,6 +27,8 @@ return new class extends Migration
             $table->date('end_date', $precision = 0)->nullable();
             $table->time('start_time', $precision = 0);
             $table->time('end_time', $precision = 0)->nullable();
+            $table->string('repeat_type', 50)->default('daily')->nullable();
+            
             
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onUpdate('NO ACTION')->onDelete('cascade');
