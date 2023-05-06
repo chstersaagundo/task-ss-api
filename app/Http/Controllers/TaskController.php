@@ -89,7 +89,7 @@ class TaskController extends Controller
             ], 422);
         }
 
-        //parsinggg stard_date, start_time, end_date, end_time //// format: 2023-05-05 23:00:00 
+        //parsinggg stard_date, start_time, end_date, end_time //// ex. format: 2023-05-05 23:00:00 
         $start = Carbon::parse($request->start_date . ' ' . $request->start_time);
         $end = Carbon::parse($request->end_date . ' ' . $request->end_time);
 
