@@ -28,7 +28,7 @@ class CategoryController extends Controller
         //kalibog shyet ahaha
         $user = Auth::user();
         $datas = User::where('email', $user->email)->first();
-        $categories = Category::where('user_id', $datas->id)->get();
+        $categories = Category::where('user_id', $datas->id)->with('tasks')->get();
 
         return response()->json([
             'success' => true,
