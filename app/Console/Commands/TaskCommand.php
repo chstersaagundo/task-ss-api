@@ -3,24 +3,26 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
-use App\Models\Task;
 use Illuminate\Console\Command;
+use App\Models\Task;
+use App\Models\Notification;
 
-class RunScheduledTasks extends Command
+
+class TaskCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'tasks:update-status';
+    protected $signature = 'tasks:tasks';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update task status if end date is lapas';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -30,16 +32,13 @@ class RunScheduledTasks extends Command
     public function handle()
     {
         $now = Carbon::now();
-        $tasks = Task::where('status', 'pending')
-                    ->where('end_date', '<=', $now->toDateString())
-                    ->where('end_time', '<', $now->toTimeString())
+        $tasks = Notification::where('display', false)
+                    ->where('triggerdate', '<=', $now)
                     ->get();
     
         foreach ($tasks as $task) {
-            $task->status = 'overdue';
+            $task->display = true;
             $task->save();
         }
     }
-
-    
 }

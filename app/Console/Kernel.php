@@ -16,10 +16,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('tasks:update-status')->everyMinute();
+        $schedule->command('tasks:notification')->everyMinute();
+        $schedule->command('tasks:tasks')->everyMinute();
     }
 
     protected $commands = [
         \App\Console\Commands\RunScheduledTasks::class,
+        \App\Console\Commands\NotificationCommand::class,
+        \App\Console\Commands\TaskCommand::class,
     ];
     /**
      * Register the commands for the application.
