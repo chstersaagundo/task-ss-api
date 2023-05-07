@@ -69,7 +69,7 @@ Route::prefix('user')->group(function() {
         Route::resource('subscriptions', SubscriptionController::class);
 
 
-        Route::get('/notification', [NotificationController::class, 'index']);
+        Route::resource('notifications', NotificationController::class);
     });
 
 });

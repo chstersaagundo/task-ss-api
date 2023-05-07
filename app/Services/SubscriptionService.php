@@ -33,7 +33,7 @@ class SubscriptionService
             $date->addYear();
         }
 
-        Subscription::create([
+        return Subscription::create([
             'user_id' => $user->id, 
             'subscription_type_id' => $sub_type->id,
             'status' => 'active',
