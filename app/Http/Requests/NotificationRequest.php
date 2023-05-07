@@ -26,7 +26,7 @@ class NotificationRequest extends FormRequest
         return [
             //
             'user_id'               => ['required'],
-            'task_id'               => ['required'],
+            'task_id'               => ['sometimes'],
             'status'                => ['sometimes', 'boolean'],
             'description'           => ['sometimes', 'string', 'max:255'],
         ];

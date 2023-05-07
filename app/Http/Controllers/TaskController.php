@@ -397,4 +397,16 @@ class TaskController extends Controller
 
 
     }
+
+
+    public function allTasks()
+    {
+        $task = Task::all();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Fetch Successfully',
+            'data' => $task
+        ], 200);
+    }
 }

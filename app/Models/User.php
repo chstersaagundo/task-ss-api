@@ -62,6 +62,10 @@ class User extends Authenticatable
         return $this->hasMany(Subscription::class);
     }
 
+    public function feedbacks() {
+        return $this->hasMany(Feedbacks::class);
+    }
+
     public function notifications() {
         return $this->hasMany(Notification::class);
     }

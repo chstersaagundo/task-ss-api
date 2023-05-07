@@ -63,13 +63,16 @@ Route::prefix('user')->group(function() {
         Route::get('blockwebsites/includes', [BlockWebsiteController::class, 'allIncludes']);
         Route::resource('blockwebsites', BlockWebsiteController::class);
 
-        Route::post('/subscribe', [SubscriptionController::class, 'storeSubData']);
-        Route::get('/currentplan', [SubscriptionController::class, 'currentPlan']);
+        Route::post('/subscriptions/subscribe', [SubscriptionController::class, 'storeSubData']);
+        Route::get('/subscriptions/currentplan', [SubscriptionController::class, 'currentPlan']);
+        Route::get('/subscriptions/all', [SubscriptionController::class, 'allSubscriptions']);
         Route::resource('subscriptions', SubscriptionController::class);
 
 
-        Route::get('/notification', [NotificationController::class, 'index']);
+        Route::resource('notifications', NotificationController::class);
     });
+
 });
+Route::get('/feedbacks/all', [FeedbackController::class, 'allFeedbacks']);
 
 Route::post('/schedule', [TaskScheduleController::class, 'store']);
