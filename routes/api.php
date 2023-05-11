@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\User\UserController;
@@ -76,3 +77,5 @@ Route::prefix('user')->group(function() {
 Route::get('/feedbacks/all', [FeedbackController::class, 'allFeedbacks']);
 
 Route::post('/schedule', [TaskScheduleController::class, 'store']);
+
+Route::post('/sendmail/{email}', [EmailController::class, 'sendMail']);
