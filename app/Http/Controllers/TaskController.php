@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use Validator;
+use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Exports\TasksExport;
 use App\Models\Notification;
+use Illuminate\Http\Request;
 use App\Services\TaskService;
 use App\Http\Requests\TaskRequest;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TaskController extends Controller
 {
@@ -373,7 +375,6 @@ class TaskController extends Controller
             'message' => 'Fetch Failed'
         ], 422);
 
-
     }
 
     public function sort($by, $order, $category ='status', $id = 'pending')
@@ -408,5 +409,10 @@ class TaskController extends Controller
             'message' => 'Fetch Successfully',
             'data' => $task
         ], 200);
+    }
+
+    public function export() 
+    {
+        return Excel::download(new TasksExport(), 'tasksreport.csv');
     }
 }
