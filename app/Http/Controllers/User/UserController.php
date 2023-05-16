@@ -45,7 +45,7 @@ class UserController extends Controller
         return response()->json([
             "success" => true,
             "message" => "Fetch Successfully",
-            "data" => User::all()
+            "data" => User::with('subscriptions')->get(),
         ]);
     }
 

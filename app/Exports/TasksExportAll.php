@@ -8,20 +8,13 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Illuminate\Support\Facades\Auth;
 
-class TasksExport implements FromCollection, WithHeadings
+class TasksExportAll implements FromCollection, WithHeadings
 {
-    public $priority;
-
-    public function __construct($priority){
-        $this->priority = $priority;
-    }
-
     public function collection()
     {
         $user = Auth::user();
         return Task::select("id", "category_id", "task_type_id", "task_name", "task_desc", "status", "priority", "start_date", "end_date", "start_time", "end_time", "repeat_type")
             ->where('user_id', $user->id)
-            ->where('priority', $this->priority)
             ->get();
     }
 

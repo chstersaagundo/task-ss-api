@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\User\UserController;
@@ -55,7 +56,9 @@ Route::prefix('user')->group(function() {
         Route::get('/tasks/sortfilter/{by?}/{order?}', [TaskController::class, 'sortFilter']);
         // Route::get('tasks/{by}/{order}/{category?}/{id?}', [TaskController::class, 'sort']);
         Route::resource('tasks', TaskController::class);
-        Route::get('/exporttasks', [TaskController::class, 'export']);
+        Route::get('/exporttasks', [TaskController::class, 'exportAll']);
+        Route::get('/exporttasks/{priority}', [TaskController::class, 'export']);
+
 
         
         //Feedback Routes
@@ -78,3 +81,5 @@ Route::prefix('user')->group(function() {
 Route::get('/feedbacks/all', [FeedbackController::class, 'allFeedbacks']);
 
 Route::post('/schedule', [TaskScheduleController::class, 'store']);
+
+Route::post('/sendmail/{email}', [EmailController::class, 'sendMail']);

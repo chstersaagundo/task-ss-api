@@ -5,8 +5,8 @@ namespace App\Console\Commands;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Notification;
-
 
 class TaskCommand extends Command
 {
@@ -37,8 +37,19 @@ class TaskCommand extends Command
                     ->get();
     
         foreach ($tasks as $task) {
+            $user = User::where('id', $task->user_id)->first();
+
             $task->display = true;
             $task->save();
+
+            $mailData = [
+                'title' => 'You only have 5 minutes to finish your task!',
+                'body' => $task->description
+            ];
+           
+            \Mail::to($user->email)->send(new \App\Mail\NotificationMail($mailData));
+           
+            dd("Email is Sent.");
         }
     }
 }

@@ -11,6 +11,7 @@ use App\Exports\TasksExport;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
+use App\Exports\TasksExportAll;
 use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -411,8 +412,13 @@ class TaskController extends Controller
         ], 200);
     }
 
-    public function export() 
+    public function export($priority) 
     {
-        return Excel::download(new TasksExport(), 'tasksreport.csv');
+        return Excel::download(new TasksExport($priority), 'tasksreport.csv');
+    }
+
+    public function exportAll() 
+    {
+        return Excel::download(new TasksExportAll(), 'tasksreport.csv');
     }
 }
