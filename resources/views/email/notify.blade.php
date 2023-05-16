@@ -9,8 +9,6 @@
 </head>
 
 <body>
-    <h1>Hoy bornato</h1>
-
     <h1>{{ $mailData['title'] }}</h1>
     <p>{{ $mailData['body'] }}</p>
 </body>

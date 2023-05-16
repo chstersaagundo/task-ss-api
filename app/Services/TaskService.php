@@ -22,32 +22,39 @@ class TaskService
         //getting the email from the authenticated user
         $datas = User::where('email', $user->email)->first();
         
-        $subscription = Subscription::where('user_id', $user->id)->first();
-        $status = $subscription ? $subscription->status : null;
+        // $subscription = Subscription::where('user_id', $user->id)->first();
+        // $status = $subscription ? $subscription->status : null;
         
+        Category::create([
+            'user_id' => $datas->id, 
+            'category_name' => $data['category_name'],
+            'category_desc' => $data['category_desc'],
+            'color' => $data['color']
+        ]);
+
         //checking if the status in Subscription table is marked as active
-        if ($status === 'active') {
-            //if so char, create the category LIMITLESSSSSS
-            Category::create([
-                'user_id' => $datas->id, 
-                'category_name' => $data['category_name'],
-                'category_desc' => $data['category_desc'],
-                'color' => $data['color']
-            ]);
-        }
-        else {
-            //otherwise, limit to 5 categories only
-            $category_count = Category::where('user_id', $datas->id)->count();
-            if ($category_count >= 5) {
-                throw new Exception('You have reached the limit of 5 categories. Subscribe dayon para mapun an harhar.');
-            }
-            Category::create([
-                'user_id' => $datas->id, 
-                'category_name' => $data['category_name'],
-                'category_desc' => $data['category_desc'],
-                'color' => $data['color']
-            ]);
-        }
+        // if ($status === 'active') {
+        //     //if so char, create the category LIMITLESSSSSS
+        //     Category::create([
+        //         'user_id' => $datas->id, 
+        //         'category_name' => $data['category_name'],
+        //         'category_desc' => $data['category_desc'],
+        //         'color' => $data['color']
+        //     ]);
+        // }
+        // else {
+        //     //otherwise, limit to 5 categories only
+        //     $category_count = Category::where('user_id', $datas->id)->count();
+        //     if ($category_count >= 5) {
+        //         throw new Exception('You have reached the limit of 5 categories. Subscribe dayon para mapun an harhar.');
+        //     }
+        //     Category::create([
+        //         'user_id' => $datas->id, 
+        //         'category_name' => $data['category_name'],
+        //         'category_desc' => $data['category_desc'],
+        //         'color' => $data['color']
+        //     ]);
+        // }
 
         return $data;
     }

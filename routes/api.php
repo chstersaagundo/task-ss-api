@@ -56,7 +56,9 @@ Route::prefix('user')->group(function() {
         Route::get('/tasks/sortfilter/{by?}/{order?}', [TaskController::class, 'sortFilter']);
         // Route::get('tasks/{by}/{order}/{category?}/{id?}', [TaskController::class, 'sort']);
         Route::resource('tasks', TaskController::class);
-        Route::get('/exporttasks', [TaskController::class, 'export']);
+        Route::get('/exporttasks', [TaskController::class, 'exportAll']);
+        Route::get('/exporttasks/{priority}', [TaskController::class, 'export']);
+
 
         
         //Feedback Routes
